@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 import HorizontalBreak from '../components/horizontalBreak';
 import NameInput from '../components/nameInput';
 import BirthDateInput from '../components/birthDateInput';
 import BirthTimeInput from '../components/birthTimeInput';
+import BirthPlaceInput from '../components/birthPlaceInput';
+import GenderSwitch from '../components/genderSwitch';
 
 export default function NewKundli() {
   const [inputValue, setInputValue] = useState('');
@@ -13,6 +16,8 @@ export default function NewKundli() {
   const [year, setYear] = useState('');
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
+  const [birthPlace, setBirthPlace] = useState('');
+  const [isFemale, setIsFemale] = useState(false);
 
   const updateDate = (nextDay: string, nextMonth: string, nextYear: string) => {
     const d = parseInt(nextDay, 10);
@@ -51,6 +56,18 @@ export default function NewKundli() {
         onChangeHour={setHour}
         onChangeMinute={setMinute}
       />
+      <HorizontalBreak/>
+      <BirthPlaceInput
+        value={birthPlace}
+        onChangeText={setBirthPlace}
+        onSearchPress={() => {}}
+      />
+      <HorizontalBreak/>
+      <GenderSwitch isFemale={isFemale} onValueChange={setIsFemale} />
+      <HorizontalBreak/>
+      <Button mode="contained" onPress={() => {}}>
+        Create Birth Chart
+      </Button>
     </View>
   );
 }

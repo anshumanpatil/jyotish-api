@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 type NameInputProps = {
   value: string;
@@ -11,8 +12,11 @@ const NameInput = ({ value, onChangeText }: NameInputProps) => {
     <View>
       <Text style={styles.label}>Name:</Text>
       <TextInput
+        label="Name"
+        mode="flat"
+        
         style={styles.input}
-        placeholder="Type something here..."
+        // placeholder="Name"
         placeholderTextColor="#999"
         onChangeText={onChangeText}
         value={value}
