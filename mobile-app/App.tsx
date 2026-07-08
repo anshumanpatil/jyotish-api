@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import CreateKundli from './pages/CreateKundli';
 import ViewKundli from './pages/ViewKundli';
 import { MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { initDatabase } from './database/database';
 
 // You can customize your theme using Material Design 3 (MD3) guidelines
 const theme = {
@@ -26,6 +27,10 @@ type AppRoute = 'create' | 'view';
 
 export default function App() {
   const [route, setRoute] = React.useState<AppRoute>('create');
+
+  React.useEffect(() => {
+    initDatabase();
+  }, []);
 
   return (
     <PaperProvider theme={theme}>
