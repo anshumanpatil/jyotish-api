@@ -21,8 +21,6 @@ export default function NewKundli({ onCreateChart }: NewKundliProps) {
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
   const [birthPlace, setBirthPlace] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
   const [isFemale, setIsFemale] = useState("Male");
   const [showErrors, setShowErrors] = useState(false);
 
@@ -87,26 +85,7 @@ export default function NewKundli({ onCreateChart }: NewKundliProps) {
         onSearchPress={() => {}}
         error={showErrors && birthPlaceError}
       />
-      <View style={styles.coordRow}>
-        <TextInput
-          label="Latitude"
-          mode="flat"
-          placeholder="Latitude"
-          value={latitude}
-          onChangeText={setLatitude}
-          style={[styles.input, styles.coordField]}
-          placeholderTextColor="#999"
-        />
-        <TextInput
-          label="Longitude"
-          mode="flat"
-          placeholder="Longitude"
-          value={longitude}
-          onChangeText={setLongitude}
-          style={[styles.input, styles.coordField]}
-          placeholderTextColor="#999"
-        />
-      </View>
+      
       <GenderSwitch isFemale={isFemale} onValueChange={setIsFemale} />
       <HorizontalBreak/>
       <Button mode="contained" onPress={handleCreateChart}>
@@ -121,11 +100,6 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
   },
-  coordRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 15,
-  },
   input: {
     height: 50,
     borderColor: '#4A90E2',
@@ -135,8 +109,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#fff',
   },
-  coordField: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
+  
 });

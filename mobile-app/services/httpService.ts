@@ -11,7 +11,11 @@ class HttpService {
     this.baseUrl = baseUrl;
   }
 
-  async get<T>(path: string, params?: Record<string, string>): Promise<HttpResponse<T>> {
+  async get<T>(
+    path: string,
+    params?: Record<string, string>,
+    headers?: Record<string, string>
+  ): Promise<HttpResponse<T>> {
     let url = `${this.baseUrl}${path}`;
     if (params) {
       const searchParams = new URLSearchParams(params);
@@ -25,6 +29,7 @@ class HttpService {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
     });
 

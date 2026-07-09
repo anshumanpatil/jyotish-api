@@ -5,7 +5,8 @@ import {
   Text, 
   TouchableOpacity, 
   View, 
-  FlatList 
+  FlatList,
+  ActivityIndicator 
 } from 'react-native';
 
 interface SelectDialogProps {
@@ -13,6 +14,7 @@ interface SelectDialogProps {
   title: string;
   options: { label: string; value: string }[];
   selectedValue: string;
+  loading?: boolean;
   onClose: () => void;
   onSelect: (value: string) => void;
 }
@@ -22,6 +24,7 @@ export default function SelectDialog({
   title,
   options,
   selectedValue,
+  loading = false,
   onClose,
   onSelect,
 }: SelectDialogProps) {
@@ -44,24 +47,30 @@ export default function SelectDialog({
           <Text style={styles.title}>{title}</Text>
           
           {/* List of selectable options */}
-          <FlatList
-            data={options}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => {
-              const isSelected = item.value === temporaryValue;
-              return (
-                <TouchableOpacity
-                  style={[styles.optionRow, isSelected && styles.selectedRow]}
-                  onPress={() => setTemporaryValue(item.value)}
-                >
-                  <Text style={[styles.optionText, isSelected && styles.selectedText]}>
-                    {item.label}
-                  </Text>
-                  <View style={[styles.radioButton, isSelected && styles.radioChecked]} />
-                </TouchableOpacity>
-              );
-            }}
-          />
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#007AFF" />
+            </View>
+          ) : (
+            <FlatList
+              data={options}
+              keyExtractor={(item) => item.value}
+              renderItem={({ item }) => {
+                const isSelected = item.value === temporaryValue;
+                return (
+                  <TouchableOpacity
+                    style={[styles.optionRow, isSelected && styles.selectedRow]}
+                    onPress={() => setTemporaryValue(item.value)}
+                  >
+                    <Text style={[styles.optionText, isSelected && styles.selectedText]}>
+                      {item.label}
+                    </Text>
+                    <View style={[styles.radioButton, isSelected && styles.radioChecked]} />
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          )}
 
           {/* Action buttons */}
           <View style={styles.buttonContainer}>
@@ -155,5 +164,10 @@ const styles = StyleSheet.create({
   buttonConfirmText: {
     color: '#fff',
     fontWeight: '600',
+  },
+  loadingContainer: {
+    paddingVertical: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
