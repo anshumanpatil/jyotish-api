@@ -2,6 +2,10 @@ export type ChartResponse = {
   chart?: Record<number, { rashi: string; planets: string[] }>;
 };
 
+export type ChartProps = {
+  onBack?: () => void;
+};
+
 export const fallbackChartData: Record<number, { rashi: string; planets: string[] }> = {
   // 1: { rashi: '2', planets: ['Asc', 'Ma'] },
   // 2: { rashi: '3', planets: ['Su', 'Me', 'Ve'] },

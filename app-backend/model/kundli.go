@@ -1,10 +1,14 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type KundaliSave struct {
 	ID        uint      `json:"id" bson:"_id"`
-	UserID    uint      `json:"user_id" bson:"user_id"`
+	UserID    uuid.UUID `json:"user_id" bson:"user_id"`
 	File      string    `json:"file" bson:"file"`
 	Data      string    `json:"data" bson:"data"`
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`

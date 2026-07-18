@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { Appbar } from 'react-native-paper';
 import DrawChart from '../components/drawChart';
 import HttpService from '../services/httpService';
-import { formatChartData, formatTimeZoneForApi, ChartResponse, fallbackChartData, isChartData } from '../utils/chartPage';
+import { formatChartData, formatTimeZoneForApi, ChartResponse, ChartProps, fallbackChartData, isChartData } from '../utils/chartPage';
 import { useKundliStore } from '../store/kundliStore';
 const { width } = Dimensions.get('window');
 
 const apiService = new HttpService('http://192.168.1.10:9393');
 
-export default function Chart() {
+export default function Chart({ onBack }: ChartProps) {
   const { latitude, longitude, year, month, day, hour, minute, timeZone } = useKundliStore();
   const [chartData, setChartData] = React.useState<
     Record<number, { rashi: string; planets: string[] }>
@@ -59,19 +60,32 @@ export default function Chart() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" />
+      <View style={styles.wrapper}>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={onBack} />
+          <Appbar.Content title="Birth Chart" />
+        </Appbar.Header>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" />
+        </View>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <DrawChart chartData={chartData} />
+    <View style={styles.wrapper}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={onBack} />
+        <Appbar.Content title="Birth Chart" />
+      </Appbar.Header>
+      <View style={styles.container}>
+        <DrawChart chartData={chartData} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: { flex: 1, backgroundColor: '#fff' },
   container: { flex: .5, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' },
 });

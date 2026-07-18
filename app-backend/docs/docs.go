@@ -53,7 +53,7 @@ const docTemplate = `{
         },
         "/geolocation/search": {
             "get": {
-                "description": "Proxy to OpenStreetMap Nominatim search API",
+                "description": "Proxy to OpenStreetMap Nominatim search API, normalized to {value, label, latitude, longitude}",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,8 +97,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "object",
-                                "additionalProperties": true
+                                "$ref": "#/definitions/handler.PlaceOption"
                             }
                         }
                     },
@@ -325,9 +324,90 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/timezone/search": {
+            "get": {
+                "description": "Proxy to timeapi.io TimeZone/coordinate API, normalized to {timeZone, utcOffset}",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "geolocation"
+                ],
+                "summary": "Look up timezone by coordinates",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "Latitude",
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Longitude",
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.TimezoneOption"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "handler.PlaceOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.TimezoneOption": {
+            "type": "object",
+            "properties": {
+                "timeZone": {
+                    "type": "string"
+                },
+                "utcOffset": {
+                    "type": "string"
+                }
+            }
+        },
         "model.AuthResponse": {
             "type": "object",
             "properties": {
@@ -335,7 +415,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "token": {
                     "type": "string"

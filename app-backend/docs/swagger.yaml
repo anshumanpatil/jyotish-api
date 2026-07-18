@@ -1,11 +1,29 @@
 basePath: /api/v1
 definitions:
+  handler.PlaceOption:
+    properties:
+      label:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+      value:
+        type: string
+    type: object
+  handler.TimezoneOption:
+    properties:
+      timeZone:
+        type: string
+      utcOffset:
+        type: string
+    type: object
   model.AuthResponse:
     properties:
       email:
         type: string
       id:
-        type: integer
+        type: string
       token:
         type: string
     type: object
@@ -332,7 +350,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Proxy to OpenStreetMap Nominatim search API
+      description: Proxy to OpenStreetMap Nominatim search API, normalized to {value,
+        label, latitude, longitude}
       parameters:
       - description: Place name query
         in: query
@@ -358,8 +377,7 @@ paths:
           description: OK
           schema:
             items:
-              additionalProperties: true
-              type: object
+              $ref: '#/definitions/handler.PlaceOption'
             type: array
         "400":
           description: Bad Request
@@ -511,6 +529,43 @@ paths:
       summary: Save kundali chart
       tags:
       - kundali
+  /timezone/search:
+    get:
+      consumes:
+      - application/json
+      description: Proxy to timeapi.io TimeZone/coordinate API, normalized to {timeZone,
+        utcOffset}
+      parameters:
+      - description: Latitude
+        in: query
+        name: latitude
+        required: true
+        type: number
+      - description: Longitude
+        in: query
+        name: longitude
+        required: true
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.TimezoneOption'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: Bad Gateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Look up timezone by coordinates
+      tags:
+      - geolocation
 securityDefinitions:
   BearerAuth:
     in: header

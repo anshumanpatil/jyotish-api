@@ -8,6 +8,7 @@ import (
 	"mobile-app-backend/model"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // SaveKundali godoc
@@ -33,7 +34,7 @@ func (h *Handler) SaveKundali(c *gin.Context) {
 		return
 	}
 
-	userID := rawID.(uint)
+	userID := rawID.(uuid.UUID)
 
 	var kundali model.Kundli
 	if err := c.ShouldBindJSON(&kundali); err != nil {
@@ -95,7 +96,7 @@ func (h *Handler) SaveKundali(c *gin.Context) {
 // @Router       /list-kundali [get]
 func (h *Handler) ListKundali(c *gin.Context) {
 	rawID, _ := c.Get("user_id")
-	userID := rawID.(uint)
+	userID := rawID.(uuid.UUID)
 
 	records := h.store.FindKundaliByUserID(userID)
 	c.JSON(http.StatusOK, gin.H{

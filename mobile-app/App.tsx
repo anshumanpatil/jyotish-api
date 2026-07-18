@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import CreateKundli from './pages/CreateKundli';
 import ViewKundli from './pages/ViewKundli';
 import Login from './pages/Login';
@@ -22,8 +22,6 @@ const theme = {
 const styles = StyleSheet.create({
   base: {
     flex: 1,
-    marginTop: Constants.statusBarHeight,
-    marginBottom: Constants.statusBarHeight,
   },
   centered: {
     flex: 1,
@@ -38,7 +36,7 @@ type AuthRoute = 'login' | 'register';
 export default function App() {
   const [route, setRoute] = React.useState<AppRoute>('create');
   const [authRoute, setAuthRoute] = React.useState<AuthRoute>('login');
-  const { isAuthenticated, isHydrating, hydrate } = useAuthStore();
+  const { isAuthenticated, isHydrating, hydrate, logout } = useAuthStore();
 
   React.useEffect(() => {
     initDatabase();
@@ -53,6 +51,7 @@ export default function App() {
         </View>
       );
     }
+    // logout(); // Ensure the user is logged out when the app starts
 
     if (!isAuthenticated) {
       return authRoute === 'login' ? (
@@ -76,8 +75,10 @@ export default function App() {
   };
 
   return (
-    <PaperProvider theme={theme}>
-      <View style={styles.base}>{renderContent()}</View>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <SafeAreaView style={styles.base}>{renderContent()}</SafeAreaView>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }

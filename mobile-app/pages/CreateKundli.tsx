@@ -28,7 +28,7 @@ export default function CreateKundli({ onNavigateToView }: CreateKundliProps) {
   };
 
   if (screen === 'chart') {
-    return <Chart />;
+    return <Chart onBack={() => setScreen('tabs')} />;
   }
 
   return (
